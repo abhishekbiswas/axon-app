@@ -5,6 +5,8 @@ import org.abhishek.axon.commands.MarkOrderCompletedCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.axonframework.eventstore.mongo.MongoEventStore;
+import org.axonframework.eventstore.fs.FileSystemEventStore;
 
 import java.util.UUID;
 

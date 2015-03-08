@@ -2,10 +2,44 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:axon="http://www.axonframework.org/schema/core"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core-2.0.xsd">
+                           http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core-2.0.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <axon:command-bus id="commandBus"/>
     <axon:event-bus id="eventBus"/>
+
+    <!-- Start: Mongo Config -->
+
+    <!--<axon:saga-manager id="mySagaManager" saga-repository="orderRepository" event-bus="eventBus">-->
+        <!--<axon:async processor-count="10" executor="myThreadPool"/>-->
+        <!--<axon:types>-->
+            <!--com.foo.MySaga-->
+        <!--</axon:types>-->
+    <!--</axon:saga-manager>-->
+
+    <!--<bean id="orderRepository" class="org.axonframework.saga.repository.mongo.MongoSagaRepository">-->
+        <!--<constructor-arg ref="sagaMongoTemplate"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="sagaMongoTemplate" class="org.axonframework.saga.repository.mongo.DefaultMongoTemplate">-->
+        <!--<constructor-arg ref="mongoDb"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="mongoDb" class="com.mongodb.Mongo" factory-bean="mongoFactoryBean" factory-method="createMongo"-->
+          <!--lazy-init="true"/>-->
+
+    <!--<bean id="mongoFactoryBean" class="org.axonframework.eventstore.mongo.MongoFactory" lazy-init="true">-->
+        <!--<property name="mongoOptions">-->
+            <!--<bean class="com.mongodb.MongoOptions" factory-bean="mongoOptionsFactory"-->
+                  <!--factory-method="createMongoOptions"/>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="mongoOptionsFactory" class="org.axonframework.eventstore.mongo.MongoOptionsFactory">-->
+        <!--<property name="connectionsPerHost" value="100"/>-->
+    <!--</bean>-->
+    <!--<task:executor id="myThreadPool" pool-size="30" />-->
+
+    <!-- End: Mongo Config -->
 
     <axon:event-sourcing-repository id="orderRepository"
                                     aggregate-type="org.abhishek.axon.aggregates.OrderItem"/>
