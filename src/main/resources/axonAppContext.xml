@@ -1,0 +1,27 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:axon="http://www.axonframework.org/schema/core"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core-2.0.xsd">
+
+    <axon:command-bus id="commandBus"/>
+    <axon:event-bus id="eventBus"/>
+
+    <axon:event-sourcing-repository id="orderRepository"
+                                    aggregate-type="org.abhishek.axon.aggregates.OrderItem"/>
+
+    <axon:aggregate-command-handler id="orderItemHandler"
+                                    aggregate-type="org.abhishek.axon.aggregates.OrderItem"
+                                    repository="orderRepository"
+                                    command-bus="commandBus"/>
+
+    <axon:filesystem-event-store id="eventStore" base-dir="target/events"/>
+
+    <bean class="org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean">
+        <property name="commandBus" ref="commandBus"/>
+    </bean>
+
+    <axon:annotation-config />
+    <bean class="org.abhishek.axon.eventhandlers.OrderEventHandler"/>
+
+</beans>

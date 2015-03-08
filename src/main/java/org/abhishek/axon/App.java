@@ -1,13 +1,32 @@
 package org.abhishek.axon;
 
-/**
- * Hello world!
- *
- */
+import org.abhishek.axon.commands.CreateOrderItemCommand;
+import org.abhishek.axon.commands.MarkOrderCompletedCommand;
+import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.UUID;
+
 public class App 
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+
+    private CommandGateway commandGateway;
+
+    public App(CommandGateway commandGateway) {
+        this.commandGateway = commandGateway;
     }
+
+    public static void main(String[] args) {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("axonAppContext.xml");
+        App app = new App(applicationContext.getBean(CommandGateway.class));
+        app.run();
+    }
+
+    private void run() {
+        final String itemId = UUID.randomUUID().toString();
+        commandGateway.send(new CreateOrderItemCommand(itemId, "Need to do this"));
+        commandGateway.send(new MarkOrderCompletedCommand(itemId));
+    }
+
 }
