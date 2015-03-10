@@ -8,6 +8,11 @@
     <axon:annotation-config />
 
     <axon:command-bus id="commandBus"/>
+    <!--<axon:disruptor-command-bus id="commandBus" event-store="eventStore" event-bus="eventBus">-->
+        <!--<axon:repositories>-->
+            <!--<axon:repository id="customerRepository" aggregate-type="org.abhishek.axon.aggregates.Customer" />-->
+        <!--</axon:repositories>-->
+    <!--</axon:disruptor-command-bus>-->
     <axon:event-bus id="eventBus"/>
 
     <axon:event-sourcing-repository id="customerRepository"

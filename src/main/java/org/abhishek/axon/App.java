@@ -27,7 +27,7 @@ public class App
     }
 
     private void run() {
-        final String customerId = UUID.randomUUID().toString();
+        final String customerId = "a1"; //UUID.randomUUID().toString();
 
         commandGateway.send(new CreateCustomerCommand(customerId, "Abhishek", "biswas.abhishek@ymail.com",
                             new Address("B-1104", "ATS Haciendas")));

@@ -43,7 +43,7 @@ public class Customer extends AbstractAnnotatedAggregateRoot {
     }
 
     @CommandHandler
-    public void changeAddress(ChangeCustomerAddressCommand command){
+    public void changeAddress(ChangeCustomerAddressCommand command) {
         apply(new CustomerAddressChangedEvent(command.getId(), command.getAddress()));
     }
 
@@ -51,9 +51,14 @@ public class Customer extends AbstractAnnotatedAggregateRoot {
     @EventHandler
     public void on(CustomerCreatedEvent event){
         this.id = event.getId();
-        this.name = event.getName();
-        this.email = event.getEmail();
-        this.address = event.getAddress();
+
+//        this.name = event.getName();
+//        this.email = event.getEmail();
+//        this.address = event.getAddress();
+
+        apply(new CustomerNameChangedEvent(event.getId(), event.getName()));
+        apply(new CustomerEmailChangedEvent(event.getId(), event.getEmail()));
+        apply(new CustomerAddressChangedEvent(event.getId(), event.getAddress()));
     }
 
     @EventHandler
@@ -67,7 +72,7 @@ public class Customer extends AbstractAnnotatedAggregateRoot {
     }
 
     @EventHandler
-    public void on(CustomerAddressChangedEvent event){
+    public void on(CustomerAddressChangedEvent event) {
         this.address = event.getAddress();
     }
 
