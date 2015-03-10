@@ -1,13 +1,13 @@
 package org.abhishek.axon;
 
-import org.abhishek.axon.commands.ChangeOrderDescriptionCommand;
-import org.abhishek.axon.commands.CreateOrderItemCommand;
-import org.abhishek.axon.commands.MarkOrderCompletedCommand;
+import org.abhishek.axon.aggregates.Address;
+import org.abhishek.axon.commands.ChangeCustomerAddressCommand;
+import org.abhishek.axon.commands.ChangeCustomerEmailCommand;
+import org.abhishek.axon.commands.ChangeCustomerNameCommand;
+import org.abhishek.axon.commands.CreateCustomerCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.axonframework.eventstore.mongo.MongoEventStore;
-import org.axonframework.eventstore.fs.FileSystemEventStore;
 
 import java.util.UUID;
 
@@ -27,10 +27,14 @@ public class App
     }
 
     private void run() {
-        final String itemId = UUID.randomUUID().toString();
-        commandGateway.send(new CreateOrderItemCommand(itemId, "Need to do this"));
-        commandGateway.send(new MarkOrderCompletedCommand(itemId));
-        commandGateway.send(new ChangeOrderDescriptionCommand(itemId, "New Description"));
+        final String customerId = UUID.randomUUID().toString();
+
+        commandGateway.send(new CreateCustomerCommand(customerId, "Abhishek", "biswas.abhishek@ymail.com",
+                            new Address("B-1104", "ATS Haciendas")));
+
+        commandGateway.send(new ChangeCustomerNameCommand(customerId, "Abhishek Biswas"));
+        commandGateway.send(new ChangeCustomerEmailCommand(customerId, "biswas.abhishek@outlook.com"));
+        commandGateway.send(new ChangeCustomerAddressCommand(customerId, new Address("I-62", "Forest County")));
     }
 
 }

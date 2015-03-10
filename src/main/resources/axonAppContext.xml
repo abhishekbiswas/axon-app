@@ -10,8 +10,8 @@
     <axon:command-bus id="commandBus"/>
     <axon:event-bus id="eventBus"/>
 
-    <axon:event-sourcing-repository id="orderRepository"
-                                    aggregate-type="org.abhishek.axon.aggregates.OrderItem">
+    <axon:event-sourcing-repository id="customerRepository"
+                                    aggregate-type="org.abhishek.axon.aggregates.Customer">
 
         <axon:snapshotter-trigger event-count-threshold="2" snapshotter-ref="snapshotter"/>
     </axon:event-sourcing-repository>
@@ -27,16 +27,16 @@
         <property name="waitForTasksToCompleteOnShutdown" value="true"/>
     </bean>
 
-    <axon:aggregate-command-handler id="orderItemHandler"
-                                    aggregate-type="org.abhishek.axon.aggregates.OrderItem"
-                                    repository="orderRepository"
+    <axon:aggregate-command-handler id="customerHandler"
+                                    aggregate-type="org.abhishek.axon.aggregates.Customer"
+                                    repository="customerRepository"
                                     command-bus="commandBus"/>
 
     <bean class="org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean">
         <property name="commandBus" ref="commandBus"/>
     </bean>
 
-    <bean class="org.abhishek.axon.eventhandlers.OrderEventHandler"/>
+    <bean class="org.abhishek.axon.eventhandlers.ExternalCustomerEventHandler"/>
 
     <!-- mongodb specific event store config-->
     <bean id="eventStore" class="org.axonframework.eventstore.mongo.MongoEventStore">
@@ -45,7 +45,7 @@
 
     <bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate">
         <constructor-arg index="0" ref="mongo"/>
-        <constructor-arg index="1" value="orders"/>
+        <constructor-arg index="1" value="customers"/>
         <constructor-arg index="2" value="domainevents"/>
         <constructor-arg index="3" value="snapshotevents"/>
         <constructor-arg index="4">
