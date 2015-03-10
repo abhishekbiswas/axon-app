@@ -31,7 +31,6 @@ public class App
 
         commandGateway.send(new CreateCustomerCommand(customerId, "Abhishek", "biswas.abhishek@ymail.com",
                             new Address("B-1104", "ATS Haciendas")));
-
         commandGateway.send(new ChangeCustomerNameCommand(customerId, "Abhishek Biswas"));
         commandGateway.send(new ChangeCustomerEmailCommand(customerId, "biswas.abhishek@outlook.com"));
         commandGateway.send(new ChangeCustomerAddressCommand(customerId, new Address("I-62", "Forest County")));

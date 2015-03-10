@@ -3,6 +3,7 @@ package org.abhishek.axon.eventhandlers;
 import org.abhishek.axon.commands.ChangeCustomerEmailCommand;
 import org.abhishek.axon.events.CustomerAddressChangedEvent;
 import org.abhishek.axon.events.CustomerCreatedEvent;
+import org.abhishek.axon.events.CustomerEmailChangedEvent;
 import org.abhishek.axon.events.CustomerNameChangedEvent;
 import org.axonframework.eventhandling.annotation.EventHandler;
 
@@ -22,7 +23,7 @@ public class ExternalCustomerEventHandler {
     }
 
     @EventHandler
-    public void handle(ChangeCustomerEmailCommand event){
+    public void handle(CustomerEmailChangedEvent event){
         System.out.println("Customer(" + event.getId() + ") email changed to: " + event.getEmail());
     }
 
