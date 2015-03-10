@@ -5,27 +5,40 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core-2.0.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
+    <axon:annotation-config />
+
     <axon:command-bus id="commandBus"/>
     <axon:event-bus id="eventBus"/>
 
     <axon:event-sourcing-repository id="orderRepository"
-                                    aggregate-type="org.abhishek.axon.aggregates.OrderItem"/>
+                                    aggregate-type="org.abhishek.axon.aggregates.OrderItem">
+
+        <axon:snapshotter-trigger event-count-threshold="2" snapshotter-ref="snapshotter"/>
+    </axon:event-sourcing-repository>
+
+    <bean id="snapshotter" class="org.axonframework.eventsourcing.SpringAggregateSnapshotter">
+        <property name="eventStore" ref="eventStore"/>
+        <property name="executor" ref="taskExecutor"/>
+    </bean>
+
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="2"/>
+        <property name="maxPoolSize" value="2"/>
+        <property name="waitForTasksToCompleteOnShutdown" value="true"/>
+    </bean>
 
     <axon:aggregate-command-handler id="orderItemHandler"
                                     aggregate-type="org.abhishek.axon.aggregates.OrderItem"
                                     repository="orderRepository"
                                     command-bus="commandBus"/>
 
-    <!--<axon:filesystem-event-store id="eventStore" base-dir="target/events"/>-->
-
     <bean class="org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean">
         <property name="commandBus" ref="commandBus"/>
     </bean>
 
-    <axon:annotation-config />
     <bean class="org.abhishek.axon.eventhandlers.OrderEventHandler"/>
 
-    <!-- Start: MongoDB specific config-->
+    <!-- mongodb specific event store config-->
     <bean id="eventStore" class="org.axonframework.eventstore.mongo.MongoEventStore">
         <constructor-arg ref="mongoTemplate"/>
     </bean>
@@ -44,6 +57,8 @@
     </bean>
 
     <mongo:mongo id="mongo" host="127.0.0.1" port="27000"/>
-    <!-- Start: MongoDB specific config-->
+
+    <!-- file based event store config-->
+    <!--<axon:filesystem-event-store id="eventStore" base-dir="target/events"/>-->
 
 </beans>

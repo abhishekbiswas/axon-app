@@ -1,5 +1,6 @@
 package org.abhishek.axon;
 
+import org.abhishek.axon.commands.ChangeOrderDescriptionCommand;
 import org.abhishek.axon.commands.CreateOrderItemCommand;
 import org.abhishek.axon.commands.MarkOrderCompletedCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -29,6 +30,7 @@ public class App
         final String itemId = UUID.randomUUID().toString();
         commandGateway.send(new CreateOrderItemCommand(itemId, "Need to do this"));
         commandGateway.send(new MarkOrderCompletedCommand(itemId));
+        commandGateway.send(new ChangeOrderDescriptionCommand(itemId, "New Description"));
     }
 
 }
