@@ -12,34 +12,62 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <axon.version>2.4</axon.version>
+        <spring.version>4.1.5.RELEASE</spring.version>
+
+        <slf4j.version>1.7.5</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+
+        <mongodb.java.version>2.11.3</mongodb.java.version>
+        <springdata.mongodb.version>1.5.2.RELEASE</springdata.mongodb.version>
     </properties>
 
     <dependencies>
+        <!-- Global axon dependencies -->
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-core</artifactId>
-            <version>2.4</version>
+            <version>${axon.version}</version>
         </dependency>
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-test</artifactId>
-            <version>2.4</version>
+            <version>${axon.version}</version>
         </dependency>
+
+        <!-- Global spring dependencies -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>4.1.5.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
+
+        <!-- Global mongodb dependencies -->
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-mongo</artifactId>
-            <version>2.0-m1</version>
+            <version>${axon.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>${mongodb.java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>${springdata.mongodb.version}</version>
+        </dependency>
+
+        <!-- Global testing dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
+
 </project>
