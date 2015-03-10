@@ -1,6 +1,5 @@
 package org.abhishek.axon.eventhandlers;
 
-import org.abhishek.axon.commands.ChangeCustomerEmailCommand;
 import org.abhishek.axon.events.CustomerAddressChangedEvent;
 import org.abhishek.axon.events.CustomerCreatedEvent;
 import org.abhishek.axon.events.CustomerEmailChangedEvent;
