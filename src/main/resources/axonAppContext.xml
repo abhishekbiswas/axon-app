@@ -2,79 +2,53 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:axon="http://www.axonframework.org/schema/core"
        xmlns:mongo="http://www.springframework.org/schema/data/mongo"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core-2.0.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.axonframework.org/schema/core http://www.axonframework.org/schema/axon-core-2.0.xsd
+                           http://www.springframework.org/schema/data/mongo
+                           http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
     <axon:annotation-config />
 
+    <!-- command gateway config-->
+    <bean class="org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean">
+        <property name="commandBus" ref="commandBus"/>
+    </bean>
+
+    <!-- command bus config-->
     <axon:command-bus id="commandBus" transaction-manager="transactionManager"/>
 
-    <!-- transaction manager specific config-->
-    <bean id="transactionManager" class="org.axonframework.unitofwork.SpringTransactionManager">
-        <constructor-arg index="0" ref="jtaTransactionManager"/>
-        <constructor-arg index="1" ref="defaultTransactionDefinition"/>
-    </bean>
-
-    <bean id="jtaTransactionManager"
-          class="org.springframework.transaction.jta.JtaTransactionManager"
-          depends-on="atomikosTransactionManager,atomikosUserTransaction">
-        <property name="transactionManager"
-                  ref="atomikosTransactionManager" />
-        <property name="userTransaction"
-                  ref="atomikosUserTransaction" />
-        <property name="allowCustomIsolationLevels" value="true" />
-    </bean>
-
-    <bean id="atomikosTransactionManager"
-          class="com.atomikos.icatch.jta.UserTransactionManager"
-          init-method="init" destroy-method="close">
-        <property name="forceShutdown" value="false" />
-    </bean>
-
-    <bean id="atomikosUserTransaction"
-          class="com.atomikos.icatch.jta.J2eeUserTransaction">
-        <property name="transactionTimeout" value="300" />
-    </bean>
-
-    <bean id="defaultTransactionDefinition" class="org.springframework.transaction.support.DefaultTransactionDefinition"/>
-
-
+    <!-- event bus config-->
     <axon:event-bus id="eventBus"/>
 
+    <!-- repository config-->
     <axon:event-sourcing-repository id="customerRepository"
                                     aggregate-type="org.abhishek.axon.aggregates.Customer">
-
         <axon:snapshotter-trigger event-count-threshold="2" snapshotter-ref="snapshotter"/>
     </axon:event-sourcing-repository>
-
     <bean id="snapshotter" class="org.axonframework.eventsourcing.SpringAggregateSnapshotter">
         <property name="eventStore" ref="eventStore"/>
         <property name="executor" ref="taskExecutor"/>
     </bean>
-
     <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <property name="corePoolSize" value="2"/>
         <property name="maxPoolSize" value="2"/>
         <property name="waitForTasksToCompleteOnShutdown" value="true"/>
     </bean>
 
+    <!-- command handler config-->
     <axon:aggregate-command-handler id="customerHandler"
                                     aggregate-type="org.abhishek.axon.aggregates.Customer"
                                     repository="customerRepository"
                                     command-bus="commandBus"/>
 
-    <bean class="org.axonframework.commandhandling.gateway.CommandGatewayFactoryBean">
-        <property name="commandBus" ref="commandBus"/>
-    </bean>
-
+    <!-- event handler config-->
     <bean class="org.abhishek.axon.eventhandlers.ExternalCustomerEventHandler"/>
 
-    <!-- mongodb specific event store config-->
+    <!-- mongodb backed event store config-->
     <bean id="eventStore" class="org.axonframework.eventstore.mongo.MongoEventStore">
         <constructor-arg ref="mongoTemplate"/>
     </bean>
-
     <bean id="mongoTemplate" class="org.axonframework.eventstore.mongo.DefaultMongoTemplate">
         <constructor-arg index="0" ref="mongo"/>
         <constructor-arg index="1" value="customers"/>
@@ -87,10 +61,34 @@
             <null/>
         </constructor-arg>
     </bean>
-
     <mongo:mongo id="mongo" host="127.0.0.1" port="27000"/>
 
     <!-- file based event store config-->
     <!--<axon:filesystem-event-store id="eventStore" base-dir="target/events"/>-->
+
+    <!-- transaction manager config-->
+    <bean id="transactionManager" class="org.axonframework.unitofwork.SpringTransactionManager">
+        <constructor-arg index="0" ref="jtaTransactionManager"/>
+        <constructor-arg index="1" ref="defaultTransactionDefinition"/>
+    </bean>
+    <bean id="jtaTransactionManager"
+          class="org.springframework.transaction.jta.JtaTransactionManager"
+          depends-on="atomikosTransactionManager,atomikosUserTransaction">
+        <property name="transactionManager"
+                  ref="atomikosTransactionManager" />
+        <property name="userTransaction"
+                  ref="atomikosUserTransaction" />
+        <property name="allowCustomIsolationLevels" value="true" />
+    </bean>
+    <bean id="atomikosTransactionManager"
+          class="com.atomikos.icatch.jta.UserTransactionManager"
+          init-method="init" destroy-method="close">
+        <property name="forceShutdown" value="false" />
+    </bean>
+    <bean id="atomikosUserTransaction"
+          class="com.atomikos.icatch.jta.J2eeUserTransaction">
+        <property name="transactionTimeout" value="300" />
+    </bean>
+    <bean id="defaultTransactionDefinition" class="org.springframework.transaction.support.DefaultTransactionDefinition"/>
 
 </beans>

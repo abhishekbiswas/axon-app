@@ -23,7 +23,7 @@
     </properties>
 
     <dependencies>
-        <!-- Global axon dependencies -->
+        <!-- axon dependencies -->
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-core</artifactId>
@@ -35,19 +35,14 @@
             <version>${axon.version}</version>
         </dependency>
 
-        <!-- Global spring dependencies -->
+        <!-- spring dependencies -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
 
-        <!-- Global mongodb dependencies -->
+        <!-- mongodb dependencies -->
         <dependency>
             <groupId>org.axonframework</groupId>
             <artifactId>axon-mongo</artifactId>
@@ -64,7 +59,7 @@
             <version>${springdata.mongodb.version}</version>
         </dependency>
 
-        <!-- Global transaction dependencies -->
+        <!-- transaction dependencies -->
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
@@ -76,7 +71,7 @@
             <version>${atomikos.version}</version>
         </dependency>
 
-        <!-- Global logging dependencies -->
+        <!-- logging dependencies -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -88,14 +83,13 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <!-- Global testing dependencies -->
+        <!-- testing dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
 </project>
