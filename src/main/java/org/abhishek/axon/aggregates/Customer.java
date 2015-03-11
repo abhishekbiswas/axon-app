@@ -51,14 +51,13 @@ public class Customer extends AbstractAnnotatedAggregateRoot {
     @EventHandler
     public void on(CustomerCreatedEvent event){
         this.id = event.getId();
+        this.name = event.getName();
+        this.email = event.getEmail();
+        this.address = event.getAddress();
 
-//        this.name = event.getName();
-//        this.email = event.getEmail();
-//        this.address = event.getAddress();
-
-        apply(new CustomerNameChangedEvent(event.getId(), event.getName()));
-        apply(new CustomerEmailChangedEvent(event.getId(), event.getEmail()));
-        apply(new CustomerAddressChangedEvent(event.getId(), event.getAddress()));
+//        apply(new CustomerNameChangedEvent(event.getId(), event.getName()));
+//        apply(new CustomerEmailChangedEvent(event.getId(), event.getEmail()));
+//        apply(new CustomerAddressChangedEvent(event.getId(), event.getAddress()));
     }
 
     @EventHandler
