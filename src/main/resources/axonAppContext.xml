@@ -16,7 +16,7 @@
     </bean>
 
     <!-- command bus config-->
-    <axon:command-bus id="commandBus" transaction-manager="transactionManager"/>
+    <axon:command-bus id="commandBus" transaction-manager="customTransactionManager"/>
 
     <!-- event bus config-->
     <axon:event-bus id="eventBus"/>
@@ -67,13 +67,16 @@
     <!--<axon:filesystem-event-store id="eventStore" base-dir="target/events"/>-->
 
     <!-- transaction manager config-->
+    <bean id="customTransactionManager" class="org.abhishek.axon.utilities.CustomTransactionManager">
+        <constructor-arg index="0" ref="transactionManager"/>
+    </bean>
     <bean id="transactionManager" class="org.axonframework.unitofwork.SpringTransactionManager">
         <constructor-arg index="0" ref="jtaTransactionManager"/>
         <constructor-arg index="1" ref="defaultTransactionDefinition"/>
     </bean>
     <bean id="jtaTransactionManager"
           class="org.springframework.transaction.jta.JtaTransactionManager"
-          depends-on="atomikosTransactionManager,atomikosUserTransaction">
+          depends-on="atomikosTransactionManager, atomikosUserTransaction">
         <property name="transactionManager"
                   ref="atomikosTransactionManager" />
         <property name="userTransaction"
